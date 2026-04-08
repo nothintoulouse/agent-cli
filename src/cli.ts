@@ -1,11 +1,11 @@
 import { parseArgs } from './parse-args.js';
-import { loadConfig, setConfigValue, getConfigValue, getConfigDir } from './config.js';
+import { loadConfig, setConfigValue, getConfigDir } from './config.js';
 import { SessionManager } from './session.js';
 import { getAdapter } from './adapters/index.js';
 import { runAgent } from './runner.js';
 import { formatDefault } from './formatter.js';
+import { snapshotBeforeRun, performUndo } from './undo.js';
 import path from 'node:path';
-import fs from 'node:fs';
 
 async function readStdin(): Promise<string> {
   if (process.stdin.isTTY) return '';
@@ -106,9 +106,7 @@ async function main(): Promise<void> {
       case 'diff':
         try { const { execSync } = await import('node:child_process'); execSync('git diff', { stdio: 'inherit' }); } catch { /* no-op */ }
         return;
-      case 'undo':
-        console.log('undo: not yet implemented');
-        return;
+      case 'undo': performUndo(); return;
       case 'log':
         console.log('log: not yet implemented');
         return;
@@ -157,6 +155,9 @@ async function main(): Promise<void> {
   const agentConfig = config.agents[adapter.name as keyof typeof config.agents];
   const model = parsed.model ?? agentConfig?.model;
   const effort = parsed.effort ?? agentConfig?.effort;
+
+  // Snapshot git state for undo support
+  snapshotBeforeRun(cwd, adapter.name);
 
   // Run
   const result = await runAgent(adapter, {
