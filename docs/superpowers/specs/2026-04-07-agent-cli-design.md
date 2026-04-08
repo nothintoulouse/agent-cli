@@ -147,7 +147,8 @@ Non-interactive mode: `-p` flag.
 ```
 claude -p <message>
   --output-format json              (default mode)
-  --output-format stream-json       (verbose mode, requires --verbose)
+  --output-format stream-json       (verbose mode)
+  --verbose                         (required with stream-json)
   --dangerously-skip-permissions
   --resume <sessionId>              (if resuming)
   --session-id <uuid>               (if new named session)
