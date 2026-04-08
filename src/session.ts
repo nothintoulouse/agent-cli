@@ -44,6 +44,16 @@ export class SessionManager {
 
   get(dir: string, agentKey: string): SessionEntry | undefined {
     const store = this.load();
+
+    // Named sessions (e.g. "claude:colors") are global — stored under _named
+    if (agentKey.includes(':')) {
+      const named = store['_named'];
+      if (!named || typeof named === 'number') return undefined;
+      const entry = (named as { [k: string]: InternalSessionEntry })[agentKey];
+      if (!entry) return undefined;
+      return { id: entry.id, lastUsed: entry.lastUsed };
+    }
+
     const dirStore = store[dir];
     if (!dirStore || typeof dirStore === 'number') return undefined;
     const entry = (dirStore as { [k: string]: InternalSessionEntry })[agentKey];
@@ -55,12 +65,21 @@ export class SessionManager {
     const store = this.load();
     store._seq = (store._seq as number) + 1;
     const seq = store._seq as number;
-    if (!store[dir]) store[dir] = {};
-    (store[dir] as { [k: string]: InternalSessionEntry })[agentKey] = {
+    const entry: InternalSessionEntry = {
       id: sessionId,
       lastUsed: new Date().toISOString(),
       seq,
     };
+
+    // Named sessions are global — stored under _named
+    if (agentKey.includes(':')) {
+      if (!store['_named']) store['_named'] = {};
+      (store['_named'] as { [k: string]: InternalSessionEntry })[agentKey] = entry;
+    } else {
+      if (!store[dir]) store[dir] = {};
+      (store[dir] as { [k: string]: InternalSessionEntry })[agentKey] = entry;
+    }
+
     this.save(store);
   }
 

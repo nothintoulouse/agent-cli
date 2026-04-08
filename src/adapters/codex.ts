@@ -39,15 +39,23 @@ export class CodexAdapter implements AgentAdapter {
     for (const line of lines) {
       try {
         const event = JSON.parse(line);
+        // Legacy format
         if (event.type === 'message' && event.role === 'assistant' && event.content) {
           text = event.content;
+        }
+        // Current format: item.completed with nested item.text
+        if (event.type === 'item.completed' && event.item?.type === 'agent_message' && event.item?.text) {
+          text = event.item.text;
         }
         if (event.session_id) {
           sessionId = event.session_id;
         }
+        if (event.thread_id) {
+          sessionId = event.thread_id;
+        }
         if (event.type === 'error') {
           isError = true;
-          text = event.message || event.content || text;
+          text = event.message || event.error?.message || event.content || text;
         }
       } catch {
         // skip non-JSON lines
