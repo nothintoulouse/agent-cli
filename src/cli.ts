@@ -29,21 +29,21 @@ Flags:
   -n, --name <name>      Name this session
   -r, --resume <name>    Resume a named session
   --new                  Start fresh session
-  --bg                   Run in background
   --json                 Raw JSON output
   --add-dir <path>       Additional directory access
   --budget <usd>         Max spend (Claude only)
 
 Commands:
   agent ls               List sessions
-  agent log              Show last turn output
   agent diff             Show git diff of changes
   agent undo             Revert last agent changes
-  agent bg               Check background task
   agent config           Show config
   agent config set <k> <v>  Set config value
   agent config path      Print config path
-  agent help             This help text`);
+  agent help             This help text
+
+Note: agents run with permission prompts disabled. See the README's
+security model section before using this on code you care about.`);
 }
 
 async function handleConfig(args: string[]): Promise<void> {

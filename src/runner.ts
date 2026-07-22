@@ -20,7 +20,7 @@ function commandExists(cmd: string): boolean {
 const INSTALL_HINTS: Record<string, string> = {
   claude: 'See https://docs.anthropic.com/en/docs/claude-code/overview',
   codex: 'npm i -g @openai/codex',
-  gemini: 'npm i -g @anthropic-ai/gemini-cli',
+  gemini: 'npm i -g @google/gemini-cli',
 };
 
 export async function runAgent(adapter: AgentAdapter, opts: RunOpts): Promise<RunResult> {

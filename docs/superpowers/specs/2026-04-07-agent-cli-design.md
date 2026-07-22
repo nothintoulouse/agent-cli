@@ -66,7 +66,7 @@ Core:
   -v, --verbose            Stream full output (diffs, commands, thinking)
   --new                    Start a fresh session, don't auto-resume
   --bg                     Run in background, notify when done
-  --json                   Raw JSON output (for scripting/NanoClaw integration)
+  --json                   Raw JSON output (for scripting and downstream integration)
 
 Session:
   -n, --name <name>        Name this session explicitly
@@ -211,7 +211,7 @@ Single file: `~/.config/agent-cli/sessions.json`
 
 ```json
 {
-  "/Users/brayden/code/myapp": {
+  "/home/dev/code/myapp": {
     "claude": {
       "id": "52ca1a42-cf11-4e16-93e6-128978e50ac0",
       "lastUsed": "2026-04-07T18:30:00Z"
@@ -221,7 +221,7 @@ Single file: `~/.config/agent-cli/sessions.json`
       "lastUsed": "2026-04-07T14:00:00Z"
     }
   },
-  "/Users/brayden/NanoClaw": {
+  "/home/dev/code/other-project": {
     "claude": {
       "id": "deadbeef-1234-5678-9abc-def012345678",
       "lastUsed": "2026-04-07T09:00:00Z"
@@ -238,7 +238,7 @@ Named sessions: stored as `agent:name`, e.g., `claude:auth`. Created via `--name
 
 ```json
 {
-  "/Users/brayden/code/myapp": {
+  "/home/dev/code/myapp": {
     "claude": { "id": "...", "lastUsed": "..." },
     "claude:auth": { "id": "...", "lastUsed": "..." },
     "claude:perf": { "id": "...", "lastUsed": "..." }
@@ -248,7 +248,7 @@ Named sessions: stored as `agent:name`, e.g., `claude:auth`. Created via `--name
 
 ### Session lifecycle
 
-1. User runs `agent "msg"` in `/Users/brayden/code/myapp`
+1. User runs `agent "msg"` in `/home/dev/code/myapp`
 2. Session manager looks up `sessions[cwd]["claude"]`
 3. Found → pass session ID to adapter via `--resume`
 4. Not found → don't pass `--resume`, let CLI create new session
@@ -278,7 +278,7 @@ Uses `--output-format stream-json --verbose` (Claude/Gemini) or `--json` (Codex)
 
 ### JSON mode (`--json`)
 
-Passes raw JSON output through unmodified. For scripting and NanoClaw integration.
+Passes raw JSON output through unmodified. For scripting and downstream integration.
 
 ### Background mode (`--bg`)
 
@@ -298,7 +298,7 @@ Before each agent run:
 
 ```json
 {
-  "dir": "/Users/brayden/code/myapp",
+  "dir": "/home/dev/code/myapp",
   "agent": "claude",
   "stashRef": "abc123def",
   "changedFiles": ["src/auth.ts", "src/routes/api.ts"],

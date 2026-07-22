@@ -2,6 +2,16 @@
   "name": "agent-cli",
   "version": "0.1.0",
   "description": "Unified CLI wrapper for Claude Code, Codex, and Gemini",
+  "license": "MIT",
+  "author": "Brayden Toulouse",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nothintoulouse/agent-cli.git"
+  },
+  "keywords": ["cli", "claude-code", "codex", "gemini", "coding-agent", "ai"],
+  "engines": {
+    "node": ">=20"
+  },
   "type": "module",
   "bin": {
     "agent": "./bin/agent.js",
