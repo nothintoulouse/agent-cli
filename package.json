@@ -17,6 +17,10 @@
     "agent": "./bin/agent.js",
     "a": "./bin/a.js"
   },
+  "files": [
+    "dist",
+    "bin"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
